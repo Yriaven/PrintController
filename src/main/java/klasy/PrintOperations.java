@@ -1,6 +1,6 @@
 package klasy;
 
-
+import javax.swing.*;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -13,8 +13,16 @@ public class PrintOperations {
 
         InetAddress IPAdress = null;
         try {
-                 IPAdress = InetAddress.getByName(ip);
-                 status = IPAdress.isReachable(1000);
+                if (IPAdress!= null)
+                {
+                    IPAdress = InetAddress.getByName(ip);
+                    status = IPAdress.isReachable(1000);
+                }
+
+                else
+                {
+                    status = false;
+                }
              }
 
         catch (UnknownHostException e)
