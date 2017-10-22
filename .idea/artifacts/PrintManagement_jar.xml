@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="PrintManagement:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/PrintManagement_jar</output-path>
+    <root id="archive" name="PrintManagement.jar">
+      <element id="module-output" name="PrintManagement" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/visallo/visallo-web-plugins-admin-user-property-privileges/2.2.1/visallo-web-plugins-admin-user-property-privileges-2.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/profesorfalken/jPowerShell/1.8/jPowerShell-1.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.10/slf4j-api-1.7.10.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
