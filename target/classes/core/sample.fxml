@@ -34,12 +34,12 @@
           </Menu>
         </menus>
       </MenuBar>
-       <Label layoutX="410.0" layoutY="6.0" text="Brak połączenia" fx:id="label" />
+       <Label fx:id="label" layoutX="410.0" layoutY="6.0" text="Brak połączenia" />
       <TabPane prefHeight="500.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="HP Laserjet">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane fx:id="p1" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <TableView fx:id="tabelka1" prefHeight="700.0" prefWidth="375.0">
                           <columns>
@@ -50,6 +50,7 @@
                         </TableView>
                         <Button fx:id="pingButton" layoutX="375.0" layoutY="25.0" mnemonicParsing="false" onAction="#executequery" prefHeight="20" prefWidth="125" text="Odśwież" />
                          <Button fx:id="RefreshButton" layoutX="375.0" layoutY="50.0" mnemonicParsing="false" onAction="#pingFromConsole" prefHeight="20" prefWidth="125" text="Sprawdź połączenie" />
+                         <Button fx:id="PrintButton" layoutX="375.0" layoutY="75.0" mnemonicParsing="false" onAction="#HPPrint" prefHeight="20" prefWidth="125" text="Drukuj" />
 
                      </children>
                   </AnchorPane>

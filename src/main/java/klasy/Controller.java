@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import javax.swing.*;
 import java.sql.*;
 
@@ -15,15 +14,15 @@ public class Controller {
     @FXML TextArea console;
     @FXML Button RefreshButton;
     @FXML Button pingButton;
+    @FXML Button PrintButton;
     @FXML Label label;
-    @FXML public TableView<Printer> tabelka1;
-    @FXML public TableColumn<Object, Object> t1;
-    @FXML public TableColumn<Object, Object> t2;
-    @FXML public TableColumn<Object, Object> t3;
-    @FXML public ObservableList<Printer> Printer_LIST;
+    @FXML TableView<Printer> tabelka1;
+    @FXML TableColumn<Object, Object> t1;
+    @FXML TableColumn<Object, Object> t2;
+    @FXML TableColumn<Object, Object> t3;
+    @FXML ObservableList<Printer> Printer_LIST;
     Connection connection = null;
     String query = "SELECT \"Name\", \"U_IP\" FROM \"@PRINTERS\"";
-    Thread thread = new Thread();
 
 
 
@@ -32,9 +31,7 @@ public class Controller {
         t2.setCellValueFactory(new PropertyValueFactory<>("PrinterIP"));
         t3.setCellValueFactory(new PropertyValueFactory<>("PrinterStatus"));
         connectToDatabase();
-        Printer_LIST = FXCollections.observableArrayList();
         executequery();
-
     }
 
     public void pingFromConsole()
@@ -47,13 +44,13 @@ public class Controller {
                 }
     }
 
-
     public void executequery()
     {
         try
         {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
+            Printer_LIST = FXCollections.observableArrayList();
 
             while (rs.next())
             {
@@ -64,12 +61,14 @@ public class Controller {
                 Printer_LIST.add(print);
             }
             tabelka1.setItems(Printer_LIST);
+            System.out.println(1);
         }
 
         catch (SQLException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+
     }
 
     public void connectToDatabase()
@@ -85,4 +84,14 @@ public class Controller {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
+
+
+    public  void HPPrint () {
+        Printer printer = tabelka1.getSelectionModel().getSelectedItem();
+        PrintOperations.PrintByHP(printer.getPrinterIP());
+    }
+
+
 }
+
+
