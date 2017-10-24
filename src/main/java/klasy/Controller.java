@@ -32,6 +32,7 @@ public class Controller {
         t3.setCellValueFactory(new PropertyValueFactory<>("PrinterStatus"));
         connectToDatabase();
         executequery();
+
     }
 
     public void pingFromConsole()
@@ -39,6 +40,7 @@ public class Controller {
                 if (tabelka1.getSelectionModel().getSelectedItem() !=null)
                 {
                     Printer printer = tabelka1.getSelectionModel().getSelectedItem();
+                    console.setText("");
                     console.appendText(String.valueOf(PrintOperations.checkConnection(printer.getPrinterIP())));
                     System.out.println(PrintOperations.checkConnection(printer.getPrinterIP()));
                 }
@@ -87,8 +89,18 @@ public class Controller {
 
 
     public  void HPPrint () {
+
         Printer printer = tabelka1.getSelectionModel().getSelectedItem();
-        PrintOperations.PrintByHP(printer.getPrinterIP());
+        if (printer.getPrinterStatus() == "false")
+        {
+            JOptionPane.showMessageDialog(null, "Drukarka niedostępna");
+        }
+
+        else
+        {
+            PrintOperations.PrintByHP(printer.getPrinterIP());
+        }
+
     }
 
 
