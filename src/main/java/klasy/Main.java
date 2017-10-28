@@ -8,10 +8,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    Controller controller = new Controller();
-    Thread thread = new Thread();
-
-
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("/core/sample.fxml"));

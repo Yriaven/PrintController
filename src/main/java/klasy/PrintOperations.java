@@ -1,6 +1,11 @@
 package klasy;
 
+import javafx.scene.control.TextArea;
+
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
 import javax.swing.*;
+import java.awt.*;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,7 +48,9 @@ public class PrintOperations {
             oStream.println(JOptionPane.showInputDialog(null));
             oStream.println("\n\n\n");
             oStream.close();
+
             sock.close();
+
         } catch (UnknownHostException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         } catch (IOException e) {
@@ -67,5 +74,25 @@ public class PrintOperations {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
+
+
+    public static void ShowInstalledPrinters (TextArea area)
+    {
+        area.appendText("");
+        PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);  //zainstalowane drukarki
+        area.appendText("Zainstalowane drukarki:"  + "\n");
+        for (int i = 0; i < services.length; i++) {
+            area.appendText(services[i].getName() + "\n");
+        }
+
+    }
+
+    public static void ShowDefaultPrinter (TextArea area)
+    {
+        area.appendText("");
+        area.appendText("Drukarka domyślna:   " + PrintServiceLookup.lookupDefaultPrintService());
+        area.appendText("");
+    }
+
 
 }

@@ -51,6 +51,8 @@
                         <Button fx:id="pingButton" layoutX="375.0" layoutY="25.0" mnemonicParsing="false" onAction="#executequery" prefHeight="20" prefWidth="125" text="Odśwież" />
                          <Button fx:id="RefreshButton" layoutX="375.0" layoutY="50.0" mnemonicParsing="false" onAction="#pingFromConsole" prefHeight="20" prefWidth="125" text="Sprawdź połączenie" />
                          <Button fx:id="PrintButton" layoutX="375.0" layoutY="75.0" mnemonicParsing="false" onAction="#HPPrint" prefHeight="20" prefWidth="125" text="Drukuj" />
+                         <Button fx:id="DefaultPrinterButton" layoutX="375.0" layoutY="100.0" mnemonicParsing="false" prefHeight="20" prefWidth="125" text="Domyślna drukarka" onAction="#showDefaultPrinter" />
+                         <Button fx:id="InstalledPrintersButton" layoutX="375.0" layoutY="125.0" mnemonicParsing="false" onAction="#showInstalled" prefHeight="20" prefWidth="125" text="Zainstalowane" />
 
                      </children>
                   </AnchorPane>
