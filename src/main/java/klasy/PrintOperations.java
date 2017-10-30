@@ -47,7 +47,9 @@ public class PrintOperations {
             PrintWriter oStream = new PrintWriter(sock.getOutputStream());
             oStream.println(JOptionPane.showInputDialog(null));
             oStream.println("\n\n\n");
+            System.out.println(oStream.checkError());  //false w przypadku sukcesu
             oStream.close();
+
 
             sock.close();
 
@@ -78,7 +80,7 @@ public class PrintOperations {
 
     public static void ShowInstalledPrinters (TextArea area)
     {
-        area.appendText("");
+        area.setText("");
         PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);  //zainstalowane drukarki
         area.appendText("Zainstalowane drukarki:"  + "\n");
         for (int i = 0; i < services.length; i++) {
@@ -89,9 +91,9 @@ public class PrintOperations {
 
     public static void ShowDefaultPrinter (TextArea area)
     {
-        area.appendText("");
+        area.setText("");
         area.appendText("Drukarka domyślna:   " + PrintServiceLookup.lookupDefaultPrintService());
-        area.appendText("");
+
     }
 
 
