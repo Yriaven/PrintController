@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.omg.SendingContext.RunTime;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
@@ -12,7 +13,9 @@ import javax.swing.*;
 import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.*;
@@ -22,8 +25,6 @@ public class Controller {
 
     @FXML
     TextArea console;
-    @FXML
-    Button RefreshButton;
     @FXML
     Button pingButton;
     @FXML
@@ -45,6 +46,15 @@ public class Controller {
     @FXML
     TableColumn<Object, Object> t3;
     @FXML
+    TableView<Printer> tabelka2;
+    @FXML
+    TableColumn<Object, Object> t4;
+    @FXML
+    TableColumn<Object, Object> t5;  //TODO dodac id, dodac klase
+    @FXML
+    TableColumn<Object, Object> t6;
+
+    @FXML
     ObservableList<Printer> Printer_LIST;
     Connection connection = null;
     String query = "SELECT \"Name\", \"U_IP\" FROM \"@PRINTERS\"";
@@ -56,6 +66,7 @@ public class Controller {
         t3.setCellValueFactory(new PropertyValueFactory<>("PrinterStatus"));
         connectToDatabase();
         executequery();
+
 
     }
 
@@ -102,7 +113,7 @@ public class Controller {
     public void HPPrint() {
 
         Printer printer = tabelka1.getSelectionModel().getSelectedItem();
-        if (printer.getPrinterStatus() == "false") {
+        if (printer.getPrinterStatus() == "request timed out") {
             JOptionPane.showMessageDialog(null, "Drukarka niedostępna");
         } else {
             PrintOperations.PrintByHP(printer.getPrinterIP());
@@ -119,27 +130,33 @@ public class Controller {
 
     public void print() {
 
-            PrinterJob pj = PrinterJob.getPrinterJob();
-            PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-            System.out.println("Number of printers configured: " + printServices.length);
-            for (PrintService printer : printServices) {
-                System.out.println("Printer: " + printer.getName());
-                if (printer.getName().equals("HP Laser Jet P3015DN - Inżynieria produkcji")) {
-                    try {
-                        pj.setPrintService(printer);
-                    }
-
-                    catch (PrinterException ex) {
-                    }
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+        System.out.println("Number of printers configured: " + printServices.length);
+        for (PrintService printer : printServices) {
+            System.out.println("Printer: " + printer.getName());
+            if (printer.getName().equals("HP Laser Jet P3015DN - Inżynieria produkcji")) {
+                try {
+                    pj.setPrintService(printer);
+                } catch (PrinterException ex) {
                 }
-
-
-
             }
+
 
         }
 
     }
+
+    public void pingSelectedItem()
+    {
+        Printer printer = tabelka1.getSelectionModel().getSelectedItem();
+        PrintOperations.ping(printer.getPrinterIP(), console);
+    }
+
+
+
+
+}
 
 
 

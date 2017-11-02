@@ -6,9 +6,7 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.swing.*;
 import java.awt.*;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -67,7 +65,7 @@ public class PrintOperations {
         }
     }
 
-    public static void printZebra()
+    public static void printZebra() //TODO sprawdzić zebrę
     {
         try {
             Socket clientSocket=new Socket("172.16.1.151",6101);
@@ -104,4 +102,33 @@ public class PrintOperations {
     }
 
 
-}
+
+        public static void ping (String ip, TextArea textArea)
+        {
+            textArea.setText("");
+            String command = "ping " + ip;
+
+            try {
+                Process sysproc = Runtime.getRuntime().exec(command);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(sysproc.getInputStream()));
+                String line;
+
+                while ((line = reader.readLine()) != null)
+                {
+                    textArea.appendText(line + "\n");
+                }
+
+            }
+
+            catch (IOException e)
+            {
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+
+        }
+    }
+
+
+
+
+
