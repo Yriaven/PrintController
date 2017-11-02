@@ -41,15 +41,15 @@
             <content>
               <AnchorPane fx:id="p1" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tabelka1" prefHeight="700.0" prefWidth="375.0">
+                        <TableView fx:id="printerTableView" prefHeight="700.0" prefWidth="375.0">
                           <columns>
                             <TableColumn fx:id="t1" prefWidth="125.0" text="Drukarka" />
                             <TableColumn fx:id="t2" prefWidth="125.0" text="IP" />
                               <TableColumn fx:id="t3" prefWidth="125.0" text="Status" />
                           </columns>
                         </TableView>
-                        <Button fx:id="pingButton" layoutX="375.0" layoutY="25.0" mnemonicParsing="false" onAction="#executequery" prefHeight="20" prefWidth="125" text="Odśwież" />
-                         <Button fx:id="PingButton" layoutX="375.0" layoutY="50.0" mnemonicParsing="false" onAction="#pingSelectedItem" prefHeight="20" prefWidth="125" text="Ping" />
+                        <Button fx:id="pingButton" layoutX="375.0" layoutY="25.0" mnemonicParsing="false" onAction="#fillPrinterTable" prefHeight="20" prefWidth="125" text="Odśwież" />
+                         <Button fx:id="PingButton" layoutX="375.0" layoutY="50.0" mnemonicParsing="false" onAction="#pingPrinter" prefHeight="20" prefWidth="125" text="Ping" />
                          <Button fx:id="PrintButton" layoutX="375.0" layoutY="75.0" mnemonicParsing="false" onAction="#HPPrint" prefHeight="20" prefWidth="125" text="Drukuj" />
                          <Button fx:id="DefaultPrinterButton" layoutX="375.0" layoutY="100.0" mnemonicParsing="false" prefHeight="20" prefWidth="125" text="Domyślna drukarka" onAction="#showDefaultPrinter" />
                          <Button fx:id="InstalledPrintersButton" layoutX="375.0" layoutY="125.0" mnemonicParsing="false" onAction="#showInstalled" prefHeight="20" prefWidth="125" text="Zainstalowane" />
@@ -79,29 +79,33 @@
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
-                            <TableView prefHeight="700.0" prefWidth="375.0">
+                            <TableView fx:id="serverTableView" prefHeight="700.0" prefWidth="375.0">
                                 <columns>
-                                    <TableColumn prefWidth="125.0" text="Serwer" />
-                                    <TableColumn prefWidth="125.0" text="IP" />
-                                    <TableColumn prefWidth="125.0" text="Status" />
+                                    <TableColumn fx:id="t4" prefWidth="125.0" text="Serwer" />
+                                    <TableColumn fx:id="t5" prefWidth="125.0" text="IP" />
+                                    <TableColumn fx:id="t6" prefWidth="125.0" text="Status" />
                                 </columns>
                             </TableView>
+                            <Button  fx:id="refreshServerButton" layoutX="375.0" layoutY="25.0" mnemonicParsing="false" onAction="#fillServerTable" prefHeight="20" prefWidth="125" text="Odśwież" />
+                            <Button  fx:id="pingServerButton" layoutX="375.0" layoutY="50.0" mnemonicParsing="false" onAction="#pingServer" prefHeight="20" prefWidth="125" text="Ping" />
                         </children>
                     </AnchorPane>
                 </content>
             </Tab>
 
-            <Tab text="Skanery">
+            <Tab text="Terminale">
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
-                            <TableView prefHeight="700.0" prefWidth="375.0">
+                            <TableView fx:id="TerminalTableView" prefHeight="700.0" prefWidth="375.0">
                                 <columns>
-                                    <TableColumn prefWidth="125.0" text="Skaner" />
-                                    <TableColumn prefWidth="125.0" text="IP" />
-                                    <TableColumn prefWidth="125.0" text="Status" />
+                                    <TableColumn fx:id="t7" prefWidth="125.0" text="Terminal" />
+                                    <TableColumn fx:id="t8" prefWidth="125.0" text="IP" />
+                                    <TableColumn fx:id="t9" prefWidth="125.0" text="Status" />
                                 </columns>
                             </TableView>
+                            <Button  fx:id="refreshTerminalButton" layoutX="375.0" layoutY="25.0" mnemonicParsing="false" onAction="#fillTerminalTable" prefHeight="20" prefWidth="125" text="Odśwież" />
+                            <Button  fx:id="pingTerminalButton" layoutX="375.0" layoutY="50.0" mnemonicParsing="false" onAction="#pingTerminal" prefHeight="20" prefWidth="125" text="Ping" />
                         </children>
                     </AnchorPane>
                 </content>

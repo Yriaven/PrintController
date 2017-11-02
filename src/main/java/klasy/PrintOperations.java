@@ -63,6 +63,7 @@ public class PrintOperations {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+
     }
 
     public static void printZebra() //TODO sprawdzić zebrę
@@ -124,6 +125,7 @@ public class PrintOperations {
             {
                 JOptionPane.showMessageDialog(null, e.getMessage());
             }
+
 
         }
     }

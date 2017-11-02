@@ -5,19 +5,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.omg.SendingContext.RunTime;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.swing.*;
-import java.awt.print.PageFormat;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.*;
 
 public class Controller {
@@ -36,9 +29,17 @@ public class Controller {
     @FXML
     Button TestButton;
     @FXML
+    Button refreshServerButton;
+    @FXML
+    Button pingServerButton;
+    @FXML
+    Button refreshTerminalButton;
+    @FXML
+    Button pingTerminalButton;
+    @FXML
     Label label;
     @FXML
-    TableView<Printer> tabelka1;
+    TableView<Printer> printerTableView;
     @FXML
     TableColumn<Object, Object> t1;
     @FXML
@@ -46,7 +47,15 @@ public class Controller {
     @FXML
     TableColumn<Object, Object> t3;
     @FXML
-    TableView<Printer> tabelka2;
+    TableView<Terminals> TerminalTableView;
+    @FXML
+    TableColumn<Object, Object> t7;
+    @FXML
+    TableColumn<Object, Object> t8;
+    @FXML
+    TableColumn<Object, Object> t9;
+    @FXML
+    TableView<Servers> serverTableView;
     @FXML
     TableColumn<Object, Object> t4;
     @FXML
@@ -56,33 +65,35 @@ public class Controller {
 
     @FXML
     ObservableList<Printer> Printer_LIST;
+    ObservableList<Servers> Server_LIST;
+    ObservableList<Terminals> Terminal_LIST;
     Connection connection = null;
-    String query = "SELECT \"Name\", \"U_IP\" FROM \"@PRINTERS\"";
+    String queryPrinter = "SELECT \"Name\", \"U_IP\" FROM \"@PRINTERS\"";
+    String queryservers = "SELECT \"Name\", \"U_IP\" FROM \"@SERVERS\"";
+    String queryterminal = "SELECT \"Name\", \"U_IP\" FROM \"@TERMINALS\"";
 
 
     public void initialize() {
         t1.setCellValueFactory(new PropertyValueFactory<>("PrinterName"));
         t2.setCellValueFactory(new PropertyValueFactory<>("PrinterIP"));
         t3.setCellValueFactory(new PropertyValueFactory<>("PrinterStatus"));
+        t4.setCellValueFactory(new PropertyValueFactory<>("ServerName"));
+        t5.setCellValueFactory(new PropertyValueFactory<>("ServerIP"));
+        t6.setCellValueFactory(new PropertyValueFactory<>("ServerStatus"));
+        t7.setCellValueFactory(new PropertyValueFactory<>("TerminalName"));
+        t8.setCellValueFactory(new PropertyValueFactory<>("TerminalIP"));
+        t9.setCellValueFactory(new PropertyValueFactory<>("TerminalStatus"));
         connectToDatabase();
-        executequery();
-
-
+        fillPrinterTable();
+        fillServerTable();
+        fillTerminalTable();
     }
 
-    public void pingFromConsole() {
-        if (tabelka1.getSelectionModel().getSelectedItem() != null) {
-            Printer printer = tabelka1.getSelectionModel().getSelectedItem();
-            console.setText("");
-            console.appendText(String.valueOf(PrintOperations.checkConnection(printer.getPrinterIP())));
-            System.out.println(PrintOperations.checkConnection(printer.getPrinterIP()));
-        }
-    }
 
-    public void executequery() {
+    public void fillPrinterTable() {
         try {
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = statement.executeQuery(queryPrinter);
             Printer_LIST = FXCollections.observableArrayList();
 
             while (rs.next()) {
@@ -92,12 +103,54 @@ public class Controller {
                 print.PrinterStatus.set(PrintOperations.checkConnection(print.getPrinterIP()));
                 Printer_LIST.add(print);
             }
-            tabelka1.setItems(Printer_LIST);
+            printerTableView.setItems(Printer_LIST);
             System.out.println(1);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
+    }
+
+    public void fillServerTable()
+    {
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(queryservers);
+            Server_LIST = FXCollections.observableArrayList();
+
+            while (rs.next()) {
+                Servers obiekt = new Servers();
+                obiekt.ServerName.set(rs.getString("Name"));
+                obiekt.ServerIP.set(rs.getString("U_IP"));
+                obiekt.ServerStatus.set(PrintOperations.checkConnection(obiekt.getServerIP()));
+                Server_LIST.add(obiekt);
+            }
+            serverTableView.setItems(Server_LIST);
+            System.out.println(1);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    public void fillTerminalTable()
+    {
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(queryterminal);
+            Terminal_LIST = FXCollections.observableArrayList();
+
+            while (rs.next()) {
+                Terminals obiekt = new Terminals();
+                obiekt.TerminalName.set(rs.getString("Name"));
+                obiekt.TerminalIP.set(rs.getString("U_IP"));
+                obiekt.TerminalStatus.set(PrintOperations.checkConnection(obiekt.getTerminalIP()));
+                Terminal_LIST.add(obiekt);
+            }
+            TerminalTableView.setItems(Terminal_LIST);
+            System.out.println(1);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
     }
 
     public void connectToDatabase() {
@@ -112,13 +165,61 @@ public class Controller {
 
     public void HPPrint() {
 
-        Printer printer = tabelka1.getSelectionModel().getSelectedItem();
-        if (printer.getPrinterStatus() == "request timed out") {
-            JOptionPane.showMessageDialog(null, "Drukarka niedostępna");
-        } else {
-            PrintOperations.PrintByHP(printer.getPrinterIP());
+        try {
+            Printer printer = printerTableView.getSelectionModel().getSelectedItem();
+            if (printer.getPrinterStatus() == "request timed out") {
+                JOptionPane.showMessageDialog(null, "Drukarka niedostępna");
+            } else {
+                PrintOperations.PrintByHP(printer.getPrinterIP());
+            }
+        }
+
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Wybierz pozycję");
+        }
+
+    }
+
+    public void pingServer()
+    {
+        try {
+            Servers server = serverTableView.getSelectionModel().getSelectedItem();
+            PrintOperations.ping(server.getServerIP(), console);
+        }
+
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Wybierz pozycję");
+        }
+
+    }
+
+    public void pingPrinter()
+    {
+        try {
+            Printer printer = printerTableView.getSelectionModel().getSelectedItem();
+            PrintOperations.ping(printer.getPrinterIP(), console);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Wybierz pozycję");
+        }
+
+    }
+
+    public void pingTerminal()
+    {
+        try {
+            Terminals terminals = TerminalTableView.getSelectionModel().getSelectedItem();
+            PrintOperations.ping(terminals.getTerminalIP(), console);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Wybierz pozycję");
         }
     }
+
 
     public void showInstalled() {
         PrintOperations.ShowInstalledPrinters(console);
@@ -145,13 +246,8 @@ public class Controller {
 
         }
 
-    }
+    }//TODO do sprawdzenia
 
-    public void pingSelectedItem()
-    {
-        Printer printer = tabelka1.getSelectionModel().getSelectedItem();
-        PrintOperations.ping(printer.getPrinterIP(), console);
-    }
 
 
 
