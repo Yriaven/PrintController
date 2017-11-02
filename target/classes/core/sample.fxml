@@ -53,6 +53,7 @@
                          <Button fx:id="PrintButton" layoutX="375.0" layoutY="75.0" mnemonicParsing="false" onAction="#HPPrint" prefHeight="20" prefWidth="125" text="Drukuj" />
                          <Button fx:id="DefaultPrinterButton" layoutX="375.0" layoutY="100.0" mnemonicParsing="false" prefHeight="20" prefWidth="125" text="Domyślna drukarka" onAction="#showDefaultPrinter" />
                          <Button fx:id="InstalledPrintersButton" layoutX="375.0" layoutY="125.0" mnemonicParsing="false" onAction="#showInstalled" prefHeight="20" prefWidth="125" text="Zainstalowane" />
+                         <Button fx:id="TestButton" layoutX="375.0" layoutY="150.0" mnemonicParsing="false" onAction="#print" prefHeight="20" prefWidth="125" text="Test" />
 
                      </children>
                   </AnchorPane>
