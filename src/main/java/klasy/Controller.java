@@ -9,6 +9,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.swing.*;
+import java.awt.print.PageFormat;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -29,6 +32,8 @@ public class Controller {
     Button InstalledPrintersButton;
     @FXML
     Button DefaultPrinterButton;
+    @FXML
+    Button TestButton;
     @FXML
     Label label;
     @FXML
@@ -51,6 +56,7 @@ public class Controller {
         t3.setCellValueFactory(new PropertyValueFactory<>("PrinterStatus"));
         connectToDatabase();
         executequery();
+
     }
 
     public void pingFromConsole() {
@@ -72,7 +78,7 @@ public class Controller {
                 Printer print = new Printer();
                 print.PrinterName.set(rs.getString("Name"));
                 print.PrinterIP.set(rs.getString("U_IP"));
-                print.PrinterStatus.set(String.valueOf(PrintOperations.checkConnection(print.getPrinterIP())));
+                print.PrinterStatus.set(PrintOperations.checkConnection(print.getPrinterIP()));
                 Printer_LIST.add(print);
             }
             tabelka1.setItems(Printer_LIST);
@@ -103,36 +109,41 @@ public class Controller {
         }
     }
 
-    public void showInstalled()
-    {
+    public void showInstalled() {
         PrintOperations.ShowInstalledPrinters(console);
     }
 
-    public void showDefaultPrinter ()
-    {
+    public void showDefaultPrinter() {
         PrintOperations.ShowDefaultPrinter(console);
     }
 
+    public void print() {
 
-}
+            PrinterJob pj = PrinterJob.getPrinterJob();
+            PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+            System.out.println("Number of printers configured: " + printServices.length);
+            for (PrintService printer : printServices) {
+                System.out.println("Printer: " + printer.getName());
+                if (printer.getName().equals("HP Laser Jet P3015DN - Inżynieria produkcji")) {
+                    try {
+                        pj.setPrintService(printer);
+                    }
+
+                    catch (PrinterException ex) {
+                    }
+                }
 
 
-//        int timeout = 1000;
-//
-//        for (int i = 1; i < 255; i++) {
-//
-//            try {
-//                String host = "172.16.2" + "." + i;
-//                InetAddress IPAdress = InetAddress.getByName(host);
-//                if (IPAdress.isReachable(1000)) {
-//                    System.out.println(IPAdress);
-//                }
-//            }
-//            catch (IOException e)
-//            {
-//
-//            }
-//        }
+
+            }
+
+        }
+
+    }
+
+
+
+
 
 
 

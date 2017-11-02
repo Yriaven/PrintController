@@ -15,15 +15,22 @@ import java.net.UnknownHostException;
 
 public class PrintOperations {
 
-    public static boolean checkConnection (String ip)
+    public static String checkConnection (String ip)
     {
         boolean status = false;
+        String connected = "request timed out";
 
         InetAddress IPAdress = null;
         try {
 
                     IPAdress = InetAddress.getByName(ip);
                     status = IPAdress.isReachable(1000);
+
+                    if (status == true)
+                    {
+                        return connected = "online";
+                    }
+
              }
 
         catch (UnknownHostException e)
@@ -36,7 +43,7 @@ public class PrintOperations {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
-        return status;
+        return connected;
 
     }
 
