@@ -12,6 +12,8 @@ import javax.swing.*;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.sql.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
 
@@ -59,9 +61,19 @@ public class Controller {
     @FXML
     TableColumn<Object, Object> t4;
     @FXML
-    TableColumn<Object, Object> t5;  //TODO dodac id, dodac klase
+    TableColumn<Object, Object> t5;
     @FXML
     TableColumn<Object, Object> t6;
+
+    Timer timer = new Timer();
+    TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            fillPrinterTable();
+            fillServerTable();
+            fillTerminalTable();
+        }
+    };
 
     @FXML
     ObservableList<Printer> Printer_LIST;
@@ -83,7 +95,8 @@ public class Controller {
         t7.setCellValueFactory(new PropertyValueFactory<>("TerminalName"));
         t8.setCellValueFactory(new PropertyValueFactory<>("TerminalIP"));
         t9.setCellValueFactory(new PropertyValueFactory<>("TerminalStatus"));
-        connectToDatabase();
+        Controller cnt = new Controller();
+        timer.schedule(task, 1000, 1000);
         fillPrinterTable();
         fillServerTable();
         fillTerminalTable();
@@ -92,6 +105,8 @@ public class Controller {
 
     public void fillPrinterTable() {
         try {
+            connection = DriverManager.getConnection("xxx");
+            label.setText("Połączono z SBOELECTROPOLI");
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(queryPrinter);
             Printer_LIST = FXCollections.observableArrayList();
@@ -104,7 +119,7 @@ public class Controller {
                 Printer_LIST.add(print);
             }
             printerTableView.setItems(Printer_LIST);
-            System.out.println(1);
+         //   connection.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -114,6 +129,8 @@ public class Controller {
     public void fillServerTable()
     {
         try {
+            connection = DriverManager.getConnection("xxx");
+            label.setText("Połączono z SBOELECTROPOLI");
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(queryservers);
             Server_LIST = FXCollections.observableArrayList();
@@ -126,7 +143,8 @@ public class Controller {
                 Server_LIST.add(obiekt);
             }
             serverTableView.setItems(Server_LIST);
-            System.out.println(1);
+           // connection.close();
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -135,6 +153,8 @@ public class Controller {
     public void fillTerminalTable()
     {
         try {
+            connection = DriverManager.getConnection("xxx");
+            label.setText("Połączono z SBOELECTROPOLI");
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(queryterminal);
             Terminal_LIST = FXCollections.observableArrayList();
@@ -147,20 +167,20 @@ public class Controller {
                 Terminal_LIST.add(obiekt);
             }
             TerminalTableView.setItems(Terminal_LIST);
-            System.out.println(1);
+           // connection.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
 
-    public void connectToDatabase() {
-        try {
-            connection = DriverManager.getConnection("jdbc:sap://172.16.0.54:30015/?currentschema=SBOELECTROPOLI", "SYSTEM", "Ep*4321#");
-            label.setText("Połączono z SBOELECTROPOLI");
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-    }
+//    public void connectToDatabase() {
+//        try {
+//            connection = DriverManager.getConnection("xx");
+//            label.setText("Połączono z SBOELECTROPOLI");
+//        } catch (SQLException e) {
+//            JOptionPane.showMessageDialog(null, e.getMessage());
+//        }
+//    }
 
 
     public void HPPrint() {

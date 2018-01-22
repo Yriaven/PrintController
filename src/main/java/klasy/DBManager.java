@@ -28,7 +28,7 @@ public class DBManager {
                 observableList.add(print);
             }
             tableView.setItems(observableList);
-            System.out.println(1);
+
         }
 
         catch (SQLException e)
@@ -41,7 +41,7 @@ public class DBManager {
     {
         try
         {
-            connection = DriverManager.getConnection("jdbc:sap://172.16.0.54:30015/?currentschema=SBOELECTROPOLI", "SYSTEM", "Ep*4321#");
+            connection = DriverManager.getConnection("xx");
             //label.setText("Połączono z SBOELECTROPOLI");
         }
 
