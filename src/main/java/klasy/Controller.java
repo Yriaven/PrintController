@@ -1,19 +1,21 @@
 package klasy;
 
+import fr.w3blog.zpl.model.ZebraLabel;
+import fr.w3blog.zpl.model.ZebraPrintException;
+import fr.w3blog.zpl.model.ZebraUtils;
+import fr.w3blog.zpl.model.element.ZebraNativeZpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
 import javax.swing.*;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.sql.*;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.HashMap;
 
 public class Controller {
 
@@ -23,255 +25,244 @@ public class Controller {
     @FXML
     Button pingButton;
     @FXML
-    Button PrintButton;
+    Button printButton;
     @FXML
-    Button InstalledPrintersButton;
-    @FXML
-    Button DefaultPrinterButton;
-    @FXML
-    Button TestButton;
-    @FXML
-    Button refreshServerButton;
-    @FXML
-    Button pingServerButton;
-    @FXML
-    Button refreshTerminalButton;
-    @FXML
-    Button pingTerminalButton;
-    @FXML
-    Label label;
-    @FXML
-    TableView<Printer> printerTableView;
-    @FXML
-    TableColumn<Object, Object> t1;
-    @FXML
-    TableColumn<Object, Object> t2;
-    @FXML
-    TableColumn<Object, Object> t3;
-    @FXML
-    TableView<Terminals> TerminalTableView;
-    @FXML
-    TableColumn<Object, Object> t7;
-    @FXML
-    TableColumn<Object, Object> t8;
-    @FXML
-    TableColumn<Object, Object> t9;
-    @FXML
-    TableView<Servers> serverTableView;
-    @FXML
-    TableColumn<Object, Object> t4;
-    @FXML
-    TableColumn<Object, Object> t5;
-    @FXML
-    TableColumn<Object, Object> t6;
-
-    Timer timer = new Timer();
-    TimerTask task = new TimerTask() {
-        @Override
-        public void run() {
-            fillPrinterTable();
-            fillServerTable();
-            fillTerminalTable();
-        }
-    };
+    Button printButton1;
 
     @FXML
-    ObservableList<Printer> Printer_LIST;
-    ObservableList<Servers> Server_LIST;
-    ObservableList<Terminals> Terminal_LIST;
-    Connection connection = null;
-    String queryPrinter = "SELECT \"Name\", \"U_IP\" FROM \"@PRINTERS\"";
-    String queryservers = "SELECT \"Name\", \"U_IP\" FROM \"@SERVERS\"";
-    String queryterminal = "SELECT \"Name\", \"U_IP\" FROM \"@TERMINALS\"";
+    Button printButton2;
+
+
+    @FXML
+    TextField textField1;
+    @FXML
+    TextField textField2;
+    @FXML
+    TextField textField3;
+
+    @FXML
+    TableView<Label> printerTableView;
+    @FXML
+    TableColumn<Object, Object> t1, t2, t3, t4, t5, t6;
+
+
+    private SortedList<Label> sortedData;
+    private String url = "jdbc:sap://172.16.0.54:30015/?currentschema=TEST_20161207";
+    private String user = "SYSTEM";
+    private String password = "Ep*4321#";
+    private ObservableList<Label> TaskList;
+    private Connection connection = null;
+    private Reader reader;
+    private String daimlerQuery = "SELECT * FROM EP_DaimlerMaleEtykietyDoWydruku";
+    private HashMap<Integer, Label> map;
+    private Task task;
 
 
     public void initialize() {
-        t1.setCellValueFactory(new PropertyValueFactory<>("PrinterName"));
-        t2.setCellValueFactory(new PropertyValueFactory<>("PrinterIP"));
-        t3.setCellValueFactory(new PropertyValueFactory<>("PrinterStatus"));
-        t4.setCellValueFactory(new PropertyValueFactory<>("ServerName"));
-        t5.setCellValueFactory(new PropertyValueFactory<>("ServerIP"));
-        t6.setCellValueFactory(new PropertyValueFactory<>("ServerStatus"));
-        t7.setCellValueFactory(new PropertyValueFactory<>("TerminalName"));
-        t8.setCellValueFactory(new PropertyValueFactory<>("TerminalIP"));
-        t9.setCellValueFactory(new PropertyValueFactory<>("TerminalStatus"));
-        Controller cnt = new Controller();
-        timer.schedule(task, 1000, 1000);
-        fillPrinterTable();
-        fillServerTable();
+        t1.setCellValueFactory(new PropertyValueFactory<>("LabelNoProperty"));
+        t2.setCellValueFactory(new PropertyValueFactory<>("QuantityProperty"));
+        t3.setCellValueFactory(new PropertyValueFactory<>("DocNumberProperty"));
+        t4.setCellValueFactory(new PropertyValueFactory<>("PartNoProperty"));
+        t5.setCellValueFactory(new PropertyValueFactory<>("DocEntryProperty"));
+        t6.setCellValueFactory(new PropertyValueFactory<>("StatusProperty"));
+        reader = new Reader();
+        map = new HashMap<>();
+
         fillTerminalTable();
+
+        textField2.setPromptText("Ilość");
+        textField3.setPromptText("Numer etykiety");
+
+
+
+
+        pingButton.setOnAction(v -> {
+            fillTerminalTable();
+
+        });
+        printButton.setOnAction(v -> {
+            gatherDataAndPrint();
+        });
     }
 
-
-    public void fillPrinterTable() {
+    private void fillTerminalTable()
+    {
         try {
-            connection = DriverManager.getConnection("xxx");
-            label.setText("Połączono z SBOELECTROPOLI");
+           // new Thread(workInBackground("Pobieranie danych...")).start();
+            connection = DriverManager.getConnection(url, user, password);
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(queryPrinter);
-            Printer_LIST = FXCollections.observableArrayList();
+            ResultSet rs = statement.executeQuery(daimlerQuery);
+            TaskList = FXCollections.observableArrayList();
 
             while (rs.next()) {
-                Printer print = new Printer();
-                print.PrinterName.set(rs.getString("Name"));
-                print.PrinterIP.set(rs.getString("U_IP"));
-                print.PrinterStatus.set(PrintOperations.checkConnection(print.getPrinterIP()));
-                Printer_LIST.add(print);
+                Label label = new Label();
+
+                label.LabelNoProperty.set(rs.getInt("Serien"));
+                label.QuantityProperty.set(rs.getInt("U_QtyOnLabel"));
+                label.DocNumberProperty.set(rs.getString("Advice note"));
+                label.DocEntryProperty.set(rs.getString("DocEntry"));
+                label.PartNoProperty.set(rs.getString("Supplier part no"));
+
+                TaskList.add(label);
+
             }
-            printerTableView.setItems(Printer_LIST);
-         //   connection.close();
+            printerTableView.setItems(TaskList);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
+
+        FilteredList<Label> filteredData = new FilteredList<>(TaskList, p -> true);
+        textField1.textProperty().addListener((observable, oldValue, newValue ) -> {
+            filteredData.setPredicate(label -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+                        return label.LabelNoProperty.toString().toLowerCase().contains(lowerCaseFilter);
+                    }
+            );
+        });
+
+        sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(printerTableView.comparatorProperty());
+        printerTableView.setItems(sortedData);
+
+
+        printButton1.setOnAction(v -> {
+            printSingleLabel();
+        });
+
+        printButton2.setOnAction(v -> {
+            printExtended();
+        });
+
+
     }
 
-    public void fillServerTable()
-    {
+    private void print(String zpl) {
+        ZebraLabel zebraLabel = new ZebraLabel(912, 912);
+
+        zebraLabel.addElement(new ZebraNativeZpl(zpl));
+
         try {
-            connection = DriverManager.getConnection("xxx");
-            label.setText("Połączono z SBOELECTROPOLI");
+            ZebraUtils.printZpl(zebraLabel, "172.16.1.161", 9100);
+        } catch (ZebraPrintException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void gatherDataAndPrint()  {
+        try {
+            connection = DriverManager.getConnection(url, user, password);
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(queryservers);
-            Server_LIST = FXCollections.observableArrayList();
+            ResultSet rs = statement.executeQuery(daimlerQuery);
+
+            new Thread(workInBackground("Drukowanie etykiet")).start();
 
             while (rs.next()) {
-                Servers obiekt = new Servers();
-                obiekt.ServerName.set(rs.getString("Name"));
-                obiekt.ServerIP.set(rs.getString("U_IP"));
-                obiekt.ServerStatus.set(PrintOperations.checkConnection(obiekt.getServerIP()));
-                Server_LIST.add(obiekt);
+                Label label = new Label();
+                label.setSupplier(rs.getString("Supplier"));
+                label.setOdbiorca(rs.getString("Odbiorca"));
+                label.setPartNo(rs.getString("Part no"));
+                label.setQuantity(rs.getInt("U_QtyOnLabel"));
+                label.setStreet(rs.getString("Street"));
+                label.setAddress(rs.getString("Adres odbiorcy"));
+                label.setAdviceNote(rs.getString("Advice note"));
+                label.setDescription(rs.getString("Description"));
+                label.setGate(rs.getString("Dock/Gate"));
+                label.setLabelNo(rs.getInt("Serien"));
+                label.setDate(rs.getString("Date"));
+                label.setSupplierPartNumber(rs.getString("Supplier part no"));
+                label.setGTL(rs.getString("GTL"));
+                label.setDocEntry(rs.getString("DocEntry"));
+                label.setLos(rs.getString("Los"));
+                String y = reader.convertFile(label);
+                System.out.println(y);
+                print(y);
             }
-            serverTableView.setItems(Server_LIST);
-           // connection.close();
-
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    public void fillTerminalTable()
-    {
-        try {
-            connection = DriverManager.getConnection("xxx");
-            label.setText("Połączono z SBOELECTROPOLI");
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(queryterminal);
-            Terminal_LIST = FXCollections.observableArrayList();
+    private void printSingleLabel()  {
+        getData();
+        int labelNo = printerTableView.getSelectionModel().getSelectedItem().getLabelNoProperty();
+        Label singleLabel = map.get(labelNo);
 
-            while (rs.next()) {
-                Terminals obiekt = new Terminals();
-                obiekt.TerminalName.set(rs.getString("Name"));
-                obiekt.TerminalIP.set(rs.getString("U_IP"));
-                obiekt.TerminalStatus.set(PrintOperations.checkConnection(obiekt.getTerminalIP()));
-                Terminal_LIST.add(obiekt);
-            }
-            TerminalTableView.setItems(Terminal_LIST);
-           // connection.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+        if (singleLabel!=null) {
+            print(reader.convertFile(singleLabel));
         }
     }
 
-//    public void connectToDatabase() {
-//        try {
-//            connection = DriverManager.getConnection("xx");
-//            label.setText("Połączono z SBOELECTROPOLI");
-//        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, e.getMessage());
-//        }
-//    }
-
-
-    public void HPPrint() {
+    private void printExtended()  {
+        getData();
+        int labelNo = printerTableView.getSelectionModel().getSelectedItem().getLabelNoProperty();
+        Label singleLabel = map.get(labelNo);
 
         try {
-            Printer printer = printerTableView.getSelectionModel().getSelectedItem();
-            if (printer.getPrinterStatus() == "request timed out") {
-                JOptionPane.showMessageDialog(null, "Drukarka niedostępna");
-            } else {
-                PrintOperations.PrintByHP(printer.getPrinterIP());
-            }
-        }
-
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Wybierz pozycję");
-        }
-
-    }
-
-    public void pingServer()
-    {
-        try {
-            Servers server = serverTableView.getSelectionModel().getSelectedItem();
-            PrintOperations.ping(server.getServerIP(), console);
-        }
-
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Wybierz pozycję");
-        }
-
-    }
-
-    public void pingPrinter()
-    {
-        try {
-            Printer printer = printerTableView.getSelectionModel().getSelectedItem();
-            PrintOperations.ping(printer.getPrinterIP(), console);
-        }
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Wybierz pozycję");
-        }
-
-    }
-
-    public void pingTerminal()
-    {
-        try {
-            Terminals terminals = TerminalTableView.getSelectionModel().getSelectedItem();
-            PrintOperations.ping(terminals.getTerminalIP(), console);
-        }
-        catch (Exception e)
-        {
-            JOptionPane.showMessageDialog(null, "Wybierz pozycję");
-        }
-    }
-
-
-    public void showInstalled() {
-        PrintOperations.ShowInstalledPrinters(console);
-    }
-
-    public void showDefaultPrinter() {
-        PrintOperations.ShowDefaultPrinter(console);
-    }
-
-    public void print() {
-
-        PrinterJob pj = PrinterJob.getPrinterJob();
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
-        System.out.println("Number of printers configured: " + printServices.length);
-        for (PrintService printer : printServices) {
-            System.out.println("Printer: " + printer.getName());
-            if (printer.getName().equals("HP Laser Jet P3015DN - Inżynieria produkcji")) {
-                try {
-                    pj.setPrintService(printer);
-                } catch (PrinterException ex) {
+            if (singleLabel!=null) {
+                if (!textField2.getText().isEmpty() || !textField3.getText().isEmpty()) {
+                    print(reader.convertFileExtended(singleLabel, textField2.getText(), textField3.getText()));
                 }
             }
+        } catch (Exception ignored){}
+    }
 
+    private void getData() {
+        try {
+            connection = DriverManager.getConnection(url, user, password);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(daimlerQuery);
+
+            while (rs.next()) {
+                Label label = new Label();
+                label.setSupplier(rs.getString("Supplier"));
+                label.setOdbiorca(rs.getString("Odbiorca"));
+                label.setPartNo(rs.getString("Part no"));
+                label.setQuantity(rs.getInt("U_QtyOnLabel"));
+                label.setStreet(rs.getString("Street"));
+                label.setAddress(rs.getString("Adres odbiorcy"));
+                label.setAdviceNote(rs.getString("Advice note"));
+                label.setDescription(rs.getString("Description"));
+                label.setGate(rs.getString("Dock/Gate"));
+                label.setLabelNo(rs.getInt("Serien"));
+                label.setDate(rs.getString("Date"));
+                label.setSupplierPartNumber(rs.getString("Supplier part no"));
+                label.setGTL(rs.getString("GTL"));
+                label.setDocEntry(rs.getString("DocEntry"));
+                label.setLos(rs.getString("Los"));
+
+                map.put(label.getLabelNo(), label);
+
+            }
+        }
+        catch (Exception ignored) {
 
         }
+    }
 
-    }//TODO do sprawdzenia
+    private Task createWorker() {
+        return new Task() {
+            @Override
+            protected Object call()  {
+                fillTerminalTable();
+                return true;
+            }
+        };
+    }
 
-
-
-
-
+    private Task workInBackground(String message) {
+        return new Task() {
+            @Override
+            protected Object call() {
+                JOptionPane.showMessageDialog(null, message);
+                return true;
+            }
+        };
+    }
 }
 
 
