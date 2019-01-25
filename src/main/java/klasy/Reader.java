@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Reader {
 
     public String readFile() throws FileNotFoundException {
-        Scanner in = new Scanner(new FileReader("W:\\Informatyka\\Lokalne\\Serwis wydruku Daimler\\etykietaEDI.txt"));
+        Scanner in = new Scanner(new FileReader("\\\\grupa\\ep\\EGTBB\\Informatyka\\Publiczne\\Serwis wydruku Daimler\\etykietaEDI.txt"));
         //Scanner in = new Scanner(new FileReader("src/main/resources/core/etykietaEDI.txt"));
         StringBuilder sb = new StringBuilder();
         while (in.hasNext()) {
@@ -34,6 +34,7 @@ public class Reader {
             sb = sb.replaceAll("NumericPar1", label.getGTL());
             sb = sb.replaceAll("NumericPar2", label.getGate());
             sb = sb.replaceAll("NumericPar4", String.valueOf((label.getLabelNo())));
+            sb = sb.replaceAll("StringParB", label.getCity());
 
             return sb;
         } catch (Exception e) {

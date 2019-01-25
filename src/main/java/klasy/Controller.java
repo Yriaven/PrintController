@@ -14,6 +14,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.HashMap;
 
@@ -31,6 +34,9 @@ public class Controller {
 
     @FXML
     Button printButton2;
+
+    @FXML
+    Button resetButton;
 
 
     @FXML
@@ -54,6 +60,7 @@ public class Controller {
     private Connection connection = null;
     private Reader reader;
     private String daimlerQuery = "SELECT * FROM EP_DaimlerMaleEtykietyDoWydruku";
+    private String resetQuery = "call EP_ResetPrint";
     private HashMap<Integer, Label> map;
     private Task task;
 
@@ -83,6 +90,18 @@ public class Controller {
         printButton.setOnAction(v -> {
             gatherDataAndPrint();
         });
+
+        resetButton.setOnAction(v -> {
+            try {
+                connection = DriverManager.getConnection(url, user, password);
+                CallableStatement statement = connection.prepareCall(resetQuery);
+                statement.execute();
+                fillTerminalTable();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        });
     }
 
     private void fillTerminalTable()
@@ -104,6 +123,7 @@ public class Controller {
                 label.PartNoProperty.set(rs.getString("Supplier part no"));
 
                 TaskList.add(label);
+                map.put(label.getLabelNoProperty(), label);
 
             }
             printerTableView.setItems(TaskList);
@@ -130,27 +150,42 @@ public class Controller {
         printerTableView.setItems(sortedData);
 
 
+
         printButton1.setOnAction(v -> {
-            printSingleLabel();
+            try {
+                printSingleLabel();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
-        printButton2.setOnAction(v -> {
+        printButton2.setOnAction(v ->   {
             printExtended();
         });
 
 
     }
 
-    private void print(String zpl) {
+    private void print(String zpl, Label label) throws IOException {
         ZebraLabel zebraLabel = new ZebraLabel(912, 912);
 
         zebraLabel.addElement(new ZebraNativeZpl(zpl));
 
-        try {
-            ZebraUtils.printZpl(zebraLabel, "172.16.1.161", 9100);
-        } catch (ZebraPrintException e) {
-            e.printStackTrace();
+        if (InetAddress.getByName("172.16.1.161").isReachable(1000)) {
+            try {
+                ZebraUtils.printZpl(zebraLabel, "172.16.1.161", 9100);
+                TaskList.remove(map.get(label.getLabelNo()));
+                System.out.println("OK");
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("ERROR 2"); //todo
+            }
+
+        } else {
+            System.out.println("BRAK POŁĄCZENIA");
         }
+
+
     }
 
     private void gatherDataAndPrint()  {
@@ -178,22 +213,29 @@ public class Controller {
                 label.setGTL(rs.getString("GTL"));
                 label.setDocEntry(rs.getString("DocEntry"));
                 label.setLos(rs.getString("Los"));
+                label.setCity(rs.getString("City"));
                 String y = reader.convertFile(label);
-                System.out.println(y);
-                print(y);
+                print(y, label);
             }
         } catch (SQLException e) {
+            System.out.println("ERROR 1");
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        finally {
+            printerTableView.setItems(TaskList);
         }
     }
 
-    private void printSingleLabel()  {
+    private void printSingleLabel() throws IOException {
         getData();
         int labelNo = printerTableView.getSelectionModel().getSelectedItem().getLabelNoProperty();
         Label singleLabel = map.get(labelNo);
 
         if (singleLabel!=null) {
-            print(reader.convertFile(singleLabel));
+            print(reader.convertFile(singleLabel), singleLabel);
         }
     }
 
@@ -205,7 +247,7 @@ public class Controller {
         try {
             if (singleLabel!=null) {
                 if (!textField2.getText().isEmpty() || !textField3.getText().isEmpty()) {
-                    print(reader.convertFileExtended(singleLabel, textField2.getText(), textField3.getText()));
+                    print(reader.convertFileExtended(singleLabel, textField2.getText(), textField3.getText()), singleLabel);
                 }
             }
         } catch (Exception ignored){}
@@ -234,14 +276,13 @@ public class Controller {
                 label.setGTL(rs.getString("GTL"));
                 label.setDocEntry(rs.getString("DocEntry"));
                 label.setLos(rs.getString("Los"));
+                label.setCity(rs.getString("City"));
 
                 map.put(label.getLabelNo(), label);
 
             }
         }
-        catch (Exception ignored) {
-
-        }
+        catch (Exception ignored) {}
     }
 
     private Task createWorker() {
