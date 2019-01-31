@@ -1,5 +1,8 @@
 package domain;
 
+import domain.model.Label;
+import domain.presenter.IReaderPresenter;
+import domain.presenter.ReaderPresenter;
 import fr.w3blog.zpl.model.ZebraLabel;
 import fr.w3blog.zpl.model.ZebraUtils;
 import fr.w3blog.zpl.model.element.ZebraNativeZpl;
@@ -18,7 +21,7 @@ import java.net.InetAddress;
 import java.sql.*;
 import java.util.HashMap;
 
-public class Controller {
+public class Controller implements ReaderPresenter.ReaderViewer {
 
 
     @FXML
@@ -45,25 +48,30 @@ public class Controller {
     TextField textField3;
 
     @FXML
-    TableView<Label> printerTableView;
+    TableView<domain.model.Label> printerTableView;
     @FXML
     TableColumn<Object, Object> t1, t2, t3, t4, t5, t6;
 
 
-    private SortedList<Label> sortedData;
+    private SortedList<domain.model.Label> sortedData;
     private String url = "jdbc:sap://172.16.0.54:30015/?currentschema=TEST_20161207";
     private String user = "SYSTEM";
     private String password = "Ep*4321#";
-    private ObservableList<Label> TaskList;
+    private ObservableList<domain.model.Label> TaskList;
     private Connection connection = null;
     private Reader reader;
     private String daimlerQuery = "SELECT * FROM EP_DaimlerMaleEtykietyDoWydruku";
     private String resetQuery = "call EP_ResetPrint";
-    private HashMap<Integer, Label> map;
+    private HashMap<Integer, domain.model.Label> map;
     private Task task;
 
 
-    public void initialize() {
+    private IReaderPresenter iReaderPresenter;
+
+    public void initialize() throws SQLException {
+
+        iReaderPresenter = new IReaderPresenter(this);
+
         t1.setCellValueFactory(new PropertyValueFactory<>("LabelNoProperty"));
         t2.setCellValueFactory(new PropertyValueFactory<>("QuantityProperty"));
         t3.setCellValueFactory(new PropertyValueFactory<>("DocNumberProperty"));
@@ -73,7 +81,8 @@ public class Controller {
         reader = new Reader();
         map = new HashMap<>();
 
-        fillTerminalTable();
+        //fillTerminalTable();
+        printerTableView.setItems(iReaderPresenter.fillTerminalTable());
 
         textField2.setPromptText("Ilość");
         textField3.setPromptText("Numer etykiety");
@@ -92,11 +101,23 @@ public class Controller {
                 connection = DriverManager.getConnection(url, user, password);
                 CallableStatement statement = connection.prepareCall(resetQuery);
                 statement.execute();
-                fillTerminalTable();
+               // fillTerminalTable();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
+        });
+
+        printButton1.setOnAction(v -> {
+            try {
+                printSingleLabel();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        printButton2.setOnAction(v -> {
+            printExtended();
         });
     }
 
@@ -109,7 +130,7 @@ public class Controller {
             TaskList = FXCollections.observableArrayList();
 
             while (rs.next()) {
-                Label label = new Label();
+                domain.model.Label label = new domain.model.Label();
 
                 label.LabelNoProperty.set(rs.getInt("Serien"));
                 label.QuantityProperty.set(rs.getInt("U_QtyOnLabel"));
@@ -126,38 +147,6 @@ public class Controller {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
-
-        FilteredList<Label> filteredData = new FilteredList<>(TaskList, p -> true);
-        textField1.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(label -> {
-                        if (newValue == null || newValue.isEmpty()) {
-                            return true;
-                        }
-
-                        String lowerCaseFilter = newValue.toLowerCase();
-                        return label.LabelNoProperty.toString().toLowerCase().contains(lowerCaseFilter);
-                    }
-            );
-        });
-
-        sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(printerTableView.comparatorProperty());
-        printerTableView.setItems(sortedData);
-
-
-        printButton1.setOnAction(v -> {
-            try {
-                printSingleLabel();
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-
-        printButton2.setOnAction(v -> {
-            printExtended();
-        });
-
-
     }
 
     private void print(String zpl) throws IOException, InterruptedException {
@@ -173,7 +162,7 @@ public class Controller {
                 e.printStackTrace();
                 System.out.println("ERROR 2"); //todo
             } finally {
-                Thread.sleep(2000);
+                //Thread.sleep(2000);
             }
 
         } else {
@@ -189,10 +178,9 @@ public class Controller {
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(daimlerQuery);
 
-            new Thread(workInBackground("Drukowanie etykiet")).start();
 
             while (rs.next()) {
-                Label label = new Label();
+                domain.model.Label label = new domain.model.Label();
                 label.setSupplier(rs.getString("Supplier"));
                 label.setOdbiorca(rs.getString("Odbiorca"));
                 label.setPartNo(rs.getString("Part no"));
@@ -226,9 +214,15 @@ public class Controller {
     }
 
     private void printSingleLabel() throws IOException, InterruptedException {
-        getData();
+     //   getData();
+        System.out.println("hello");
         int labelNo = printerTableView.getSelectionModel().getSelectedItem().getLabelNoProperty();
-        Label singleLabel = map.get(labelNo);
+
+        System.out.println(labelNo);
+
+        Label singleLabel = DataProvider.map.get(labelNo);
+
+        System.out.println(singleLabel);
 
         if (singleLabel != null) {
             print(reader.convertFile(singleLabel));
@@ -236,9 +230,10 @@ public class Controller {
     }
 
     private void printExtended() {
-        getData();
+       // getData();
+        System.out.println("hello");
         int labelNo = printerTableView.getSelectionModel().getSelectedItem().getLabelNoProperty();
-        Label singleLabel = map.get(labelNo);
+        domain.model.Label singleLabel = map.get(labelNo);
 
         try {
             if (singleLabel != null) {
@@ -250,56 +245,20 @@ public class Controller {
         }
     }
 
-    private void getData() {
-        try {
-            connection = DriverManager.getConnection(url, user, password);
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(daimlerQuery);
 
-            while (rs.next()) {
-                Label label = new Label();
-                label.setSupplier(rs.getString("Supplier"));
-                label.setOdbiorca(rs.getString("Odbiorca"));
-                label.setPartNo(rs.getString("Part no"));
-                label.setQuantity(rs.getInt("U_QtyOnLabel"));
-                label.setStreet(rs.getString("Street"));
-                label.setAddress(rs.getString("Adres odbiorcy"));
-                label.setAdviceNote(rs.getString("Advice note"));
-                label.setDescription(rs.getString("Description"));
-                label.setGate(rs.getString("Dock/Gate"));
-                label.setLabelNo(rs.getInt("Serien"));
-                label.setDate(rs.getString("Date"));
-                label.setSupplierPartNumber(rs.getString("Supplier part no"));
-                label.setGTL(rs.getString("GTL"));
-                label.setDocEntry(rs.getString("DocEntry"));
-                label.setLos(rs.getString("Los"));
-                label.setCity(rs.getString("City"));
+    @Override
+    public void onError() {
 
-                map.put(label.getLabelNo(), label);
-
-            }
-        } catch (Exception ignored) {
-        }
     }
 
-    private Task createWorker() {
-        return new Task() {
-            @Override
-            protected Object call() {
-                fillTerminalTable();
-                return true;
-            }
-        };
+    @Override
+    public void onResult() {
+
     }
 
-    private Task workInBackground(String message) {
-        return new Task() {
-            @Override
-            protected Object call() {
-                JOptionPane.showMessageDialog(null, message);
-                return true;
-            }
-        };
+    @Override
+    public void onProcess() {
+
     }
 }
 
