@@ -81,8 +81,6 @@ public class Controller {
         textField3.setPromptText("Numer etykiety");
 
 
-
-
         pingButton.setOnAction(v -> {
             fillTerminalTable();
 
@@ -104,10 +102,9 @@ public class Controller {
         });
     }
 
-    private void fillTerminalTable()
-    {
+    private void fillTerminalTable() {
         try {
-           // new Thread(workInBackground("Pobieranie danych...")).start();
+            // new Thread(workInBackground("Pobieranie danych...")).start();
             connection = DriverManager.getConnection(url, user, password);
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(daimlerQuery);
@@ -133,13 +130,13 @@ public class Controller {
 
 
         FilteredList<Label> filteredData = new FilteredList<>(TaskList, p -> true);
-        textField1.textProperty().addListener((observable, oldValue, newValue ) -> {
+        textField1.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(label -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
 
-                String lowerCaseFilter = newValue.toLowerCase();
+                        String lowerCaseFilter = newValue.toLowerCase();
                         return label.LabelNoProperty.toString().toLowerCase().contains(lowerCaseFilter);
                     }
             );
@@ -150,35 +147,35 @@ public class Controller {
         printerTableView.setItems(sortedData);
 
 
-
         printButton1.setOnAction(v -> {
             try {
                 printSingleLabel();
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
         });
 
-        printButton2.setOnAction(v ->   {
+        printButton2.setOnAction(v -> {
             printExtended();
         });
 
 
     }
 
-    private void print(String zpl, Label label) throws IOException {
+    private void print(String zpl) throws IOException, InterruptedException {
         ZebraLabel zebraLabel = new ZebraLabel(912, 912);
 
         zebraLabel.addElement(new ZebraNativeZpl(zpl));
 
-        if (InetAddress.getByName("172.16.1.161").isReachable(1000)) {
+        if (InetAddress.getByName("172.16.1.151").isReachable(1000)) {
             try {
-                ZebraUtils.printZpl(zebraLabel, "172.16.1.161", 9100);
-                TaskList.remove(map.get(label.getLabelNo()));
+                ZebraUtils.printZpl(zebraLabel, "172.16.1.151", 9100);
                 System.out.println("OK");
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("ERROR 2"); //todo
+            } finally {
+                Thread.sleep(2000);
             }
 
         } else {
@@ -188,7 +185,7 @@ public class Controller {
 
     }
 
-    private void gatherDataAndPrint()  {
+    private void gatherDataAndPrint() {
         try {
             connection = DriverManager.getConnection(url, user, password);
             Statement statement = connection.createStatement();
@@ -215,42 +212,44 @@ public class Controller {
                 label.setLos(rs.getString("Los"));
                 label.setCity(rs.getString("City"));
                 String y = reader.convertFile(label);
-                print(y, label);
+                //todo budowa pliku
+                print(y);
             }
+
+            //todo drukowanie tutaj
         } catch (SQLException e) {
             System.out.println("ERROR 1");
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-        }
-
-        finally {
+        } finally {
             printerTableView.setItems(TaskList);
         }
     }
 
-    private void printSingleLabel() throws IOException {
+    private void printSingleLabel() throws IOException, InterruptedException {
         getData();
         int labelNo = printerTableView.getSelectionModel().getSelectedItem().getLabelNoProperty();
         Label singleLabel = map.get(labelNo);
 
-        if (singleLabel!=null) {
-            print(reader.convertFile(singleLabel), singleLabel);
+        if (singleLabel != null) {
+            print(reader.convertFile(singleLabel));
         }
     }
 
-    private void printExtended()  {
+    private void printExtended() {
         getData();
         int labelNo = printerTableView.getSelectionModel().getSelectedItem().getLabelNoProperty();
         Label singleLabel = map.get(labelNo);
 
         try {
-            if (singleLabel!=null) {
+            if (singleLabel != null) {
                 if (!textField2.getText().isEmpty() || !textField3.getText().isEmpty()) {
-                    print(reader.convertFileExtended(singleLabel, textField2.getText(), textField3.getText()), singleLabel);
+                    print(reader.convertFileExtended(singleLabel, textField2.getText(), textField3.getText()));
                 }
             }
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
     }
 
     private void getData() {
@@ -281,14 +280,14 @@ public class Controller {
                 map.put(label.getLabelNo(), label);
 
             }
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored) {}
     }
 
     private Task createWorker() {
         return new Task() {
             @Override
-            protected Object call()  {
+            protected Object call() {
                 fillTerminalTable();
                 return true;
             }
