@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import javax.swing.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.sql.*;
@@ -57,13 +58,9 @@ public class Controller implements ReaderPresenter.ReaderViewer {
     private String url = "jdbc:sap://172.16.0.54:30015/?currentschema=TEST_20161207";
     private String user = "SYSTEM";
     private String password = "Ep*4321#";
-    private ObservableList<domain.model.Label> TaskList;
     private Connection connection = null;
-    private Reader reader;
-    private String daimlerQuery = "SELECT * FROM EP_DaimlerMaleEtykietyDoWydruku";
     private String resetQuery = "call EP_ResetPrint";
-    private HashMap<Integer, domain.model.Label> map;
-    private Task task;
+
 
 
     private IReaderPresenter iReaderPresenter;
@@ -78,10 +75,7 @@ public class Controller implements ReaderPresenter.ReaderViewer {
         t4.setCellValueFactory(new PropertyValueFactory<>("PartNoProperty"));
         t5.setCellValueFactory(new PropertyValueFactory<>("DocEntryProperty"));
         t6.setCellValueFactory(new PropertyValueFactory<>("StatusProperty"));
-        reader = new Reader();
-        map = new HashMap<>();
 
-        //fillTerminalTable();
         printerTableView.setItems(iReaderPresenter.fillTerminalTable());
 
         textField2.setPromptText("Ilość");
@@ -89,11 +83,21 @@ public class Controller implements ReaderPresenter.ReaderViewer {
 
 
         pingButton.setOnAction(v -> {
-            fillTerminalTable();
+            try {
+                printerTableView.setItems(iReaderPresenter.fillTerminalTable());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
         });
         printButton.setOnAction(v -> {
-            gatherDataAndPrint();
+            try {
+                gatherDataAndPrint();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         });
 
         resetButton.setOnAction(v -> {
@@ -101,7 +105,7 @@ public class Controller implements ReaderPresenter.ReaderViewer {
                 connection = DriverManager.getConnection(url, user, password);
                 CallableStatement statement = connection.prepareCall(resetQuery);
                 statement.execute();
-               // fillTerminalTable();
+                printerTableView.setItems(iReaderPresenter.fillTerminalTable());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -111,7 +115,7 @@ public class Controller implements ReaderPresenter.ReaderViewer {
         printButton1.setOnAction(v -> {
             try {
                 printSingleLabel();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
@@ -121,35 +125,8 @@ public class Controller implements ReaderPresenter.ReaderViewer {
         });
     }
 
-    private void fillTerminalTable() {
-        try {
-            // new Thread(workInBackground("Pobieranie danych...")).start();
-            connection = DriverManager.getConnection(url, user, password);
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(daimlerQuery);
-            TaskList = FXCollections.observableArrayList();
 
-            while (rs.next()) {
-                domain.model.Label label = new domain.model.Label();
-
-                label.LabelNoProperty.set(rs.getInt("Serien"));
-                label.QuantityProperty.set(rs.getInt("U_QtyOnLabel"));
-                label.DocNumberProperty.set(rs.getString("Advice note"));
-                label.DocEntryProperty.set(rs.getString("DocEntry"));
-                label.PartNoProperty.set(rs.getString("Supplier part no"));
-
-                TaskList.add(label);
-                map.put(label.getLabelNoProperty(), label);
-
-            }
-            printerTableView.setItems(TaskList);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-
-    }
-
-    private void print(String zpl) throws IOException, InterruptedException {
+    private void print(String zpl) throws IOException {
         ZebraLabel zebraLabel = new ZebraLabel(912, 912);
 
         zebraLabel.addElement(new ZebraNativeZpl(zpl));
@@ -172,73 +149,31 @@ public class Controller implements ReaderPresenter.ReaderViewer {
 
     }
 
-    private void gatherDataAndPrint() {
-        try {
-            connection = DriverManager.getConnection(url, user, password);
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(daimlerQuery);
-
-
-            while (rs.next()) {
-                domain.model.Label label = new domain.model.Label();
-                label.setSupplier(rs.getString("Supplier"));
-                label.setOdbiorca(rs.getString("Odbiorca"));
-                label.setPartNo(rs.getString("Part no"));
-                label.setQuantity(rs.getInt("U_QtyOnLabel"));
-                label.setStreet(rs.getString("Street"));
-                label.setAddress(rs.getString("Adres odbiorcy"));
-                label.setAdviceNote(rs.getString("Advice note"));
-                label.setDescription(rs.getString("Description"));
-                label.setGate(rs.getString("Dock/Gate"));
-                label.setLabelNo(rs.getInt("Serien"));
-                label.setDate(rs.getString("Date"));
-                label.setSupplierPartNumber(rs.getString("Supplier part no"));
-                label.setGTL(rs.getString("GTL"));
-                label.setDocEntry(rs.getString("DocEntry"));
-                label.setLos(rs.getString("Los"));
-                label.setCity(rs.getString("City"));
-                String y = reader.convertFile(label);
-                //todo budowa pliku
-                print(y);
-            }
-
-            //todo drukowanie tutaj
-        } catch (SQLException e) {
-            System.out.println("ERROR 1");
-            e.printStackTrace();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            printerTableView.setItems(TaskList);
-        }
+    private void gatherDataAndPrint() throws IOException, SQLException {
+      print(iReaderPresenter.buildOneTask());
     }
 
-    private void printSingleLabel() throws IOException, InterruptedException {
-     //   getData();
-        System.out.println("hello");
+    private void printSingleLabel() throws IOException {
+
         int labelNo = printerTableView.getSelectionModel().getSelectedItem().getLabelNoProperty();
-
-        System.out.println(labelNo);
-
         Label singleLabel = DataProvider.map.get(labelNo);
 
-        System.out.println(singleLabel);
 
         if (singleLabel != null) {
-            print(reader.convertFile(singleLabel));
+            String zpl = Reader.convertFile(singleLabel);
+            print(zpl);
         }
     }
 
     private void printExtended() {
-       // getData();
-        System.out.println("hello");
+
         int labelNo = printerTableView.getSelectionModel().getSelectedItem().getLabelNoProperty();
-        domain.model.Label singleLabel = map.get(labelNo);
+        domain.model.Label singleLabel = DataProvider.map.get(labelNo);
 
         try {
             if (singleLabel != null) {
                 if (!textField2.getText().isEmpty() || !textField3.getText().isEmpty()) {
-                    print(reader.convertFileExtended(singleLabel, textField2.getText(), textField3.getText()));
+                    print(Reader.convertFileExtended(singleLabel, textField2.getText(), textField3.getText()));
                 }
             }
         } catch (Exception ignored) {
