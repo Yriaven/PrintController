@@ -1,7 +1,6 @@
-package klasy;
+package domain;
 
 import fr.w3blog.zpl.model.ZebraLabel;
-import fr.w3blog.zpl.model.ZebraPrintException;
 import fr.w3blog.zpl.model.ZebraUtils;
 import fr.w3blog.zpl.model.element.ZebraNativeZpl;
 import javafx.collections.FXCollections;
@@ -16,7 +15,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.HashMap;
 

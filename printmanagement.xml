@@ -161,7 +161,7 @@
       <exclude name="PrintManagement.jar"/>
     </fx:fileset>
     <fx:fileset id="all_PrintManagement" dir="${artifact.temp.output.PrintManagement}" includes="**/*.jar"/>
-    <fx:application id="PrintManagement_id" name="PrintManagement" mainClass="klasy.Main"/>
+    <fx:application id="PrintManagement_id" name="PrintManagement" mainClass="domain.Main"/>
     <fx:jar destfile="${artifact.temp.output.PrintManagement}/PrintManagement.jar">
       <fx:application refid="PrintManagement_id"/>
       <fileset dir="${artifact.temp.output.PrintManagement}" excludes="**/*.jar"/>
