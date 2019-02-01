@@ -1,4 +1,6 @@
-package klasy;
+package domain;
+
+import domain.model.Label;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -6,9 +8,8 @@ import java.util.Scanner;
 
 public class Reader {
 
-    public String readFile() throws FileNotFoundException {
+    private static String readFile() throws FileNotFoundException {
         Scanner in = new Scanner(new FileReader("\\\\grupa\\ep\\EGTBB\\Informatyka\\Publiczne\\Serwis wydruku Daimler\\etykietaEDI.txt"));
-        //Scanner in = new Scanner(new FileReader("src/main/resources/core/etykietaEDI.txt"));
         StringBuilder sb = new StringBuilder();
         while (in.hasNext()) {
             sb.append(in.next());
@@ -17,10 +18,13 @@ public class Reader {
         return sb.toString();
     }
 
-    public String convertFile(Label label) {
+    public static String convertFile(Label label) {
+
+        String sb = "";
 
         try {
-            String sb = readFile();
+            sb = readFile();
+            System.out.println(sb);
             sb = sb.replaceAll("StringPar1", label.getOdbiorca());;
             sb = sb.replaceAll("StringPar3", label.getPartNo());
             sb = sb.replaceAll("StringPar4", String.valueOf(label.getQuantity()));
@@ -36,14 +40,16 @@ public class Reader {
             sb = sb.replaceAll("NumericPar4", String.valueOf((label.getLabelNo())));
             sb = sb.replaceAll("StringParB", label.getCity());
 
+            System.out.println("Przekonwertowany " +sb);
+
             return sb;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return null;
+            return sb;
         }
     }
 
-    public String convertFileExtended(Label label, String quantity, String labelNumber) {
+    public static String convertFileExtended(Label label, String quantity, String labelNumber) {
 
         try {
             String sb = readFile();
