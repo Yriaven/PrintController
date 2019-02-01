@@ -2,6 +2,9 @@ package domain.presenter;
 
 import domain.model.Label;
 import domain.services.DBService;
+import fr.w3blog.zpl.model.ZebraLabel;
+import fr.w3blog.zpl.model.ZebraUtils;
+import fr.w3blog.zpl.model.element.ZebraNativeZpl;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
@@ -9,6 +12,9 @@ import lombok.AllArgsConstructor;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -62,6 +68,7 @@ public class IReaderPresenter implements ReaderPresenter {
             return converted;
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            readerViewer.onError();
             return converted;
         }
     }
@@ -71,6 +78,31 @@ public class IReaderPresenter implements ReaderPresenter {
     public String buildOneTask() throws FileNotFoundException, SQLException {
         return this.dbService.getSingleTask(this.connection);
     }
+
+    @Override
+    public void sendToPrinter(String zpl) throws IOException {
+        ZebraLabel zebraLabel = new ZebraLabel(912, 912);
+
+        zebraLabel.addElement(new ZebraNativeZpl(zpl));
+
+        if (InetAddress.getByName("172.16.1.151").isReachable(1000)) {
+            try {
+                ZebraUtils.printZpl(zebraLabel, "172.16.1.151", 9100);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("ERROR 2"); //todo
+            }
+        } else {
+            System.out.println("BRAK POŁĄCZENIA");
+            readerViewer.onError();
+        }
+    }
+
+    @Override
+    public void callUpdateQuery() throws SQLException {
+        this.dbService.callUpdateProcedure(connection);
+    }
+
 
     public IReaderPresenter(ReaderViewer readerViewer) {
         this.dbService = new DBService();

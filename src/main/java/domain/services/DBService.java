@@ -93,4 +93,10 @@ public class DBService {
         }
         return sb.toString();
     }
+
+    public void callUpdateProcedure(Connection connection) throws SQLException {
+        connection = DriverManager.getConnection(url, user, password);
+        CallableStatement statement = connection.prepareCall(resetQuery);
+        statement.execute();
+    }
 }

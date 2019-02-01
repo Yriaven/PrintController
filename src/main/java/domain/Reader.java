@@ -8,9 +8,8 @@ import java.util.Scanner;
 
 public class Reader {
 
-    public static String readFile() throws FileNotFoundException {
+    private static String readFile() throws FileNotFoundException {
         Scanner in = new Scanner(new FileReader("\\\\grupa\\ep\\EGTBB\\Informatyka\\Publiczne\\Serwis wydruku Daimler\\etykietaEDI.txt"));
-        //Scanner in = new Scanner(new FileReader("src/main/resources/core/etykietaEDI.txt"));
         StringBuilder sb = new StringBuilder();
         while (in.hasNext()) {
             sb.append(in.next());
