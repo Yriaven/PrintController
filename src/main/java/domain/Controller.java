@@ -51,10 +51,8 @@ public class Controller implements ReaderPresenter.ReaderViewer {
     public void initialize() throws SQLException {
 
         iReaderPresenter = new IReaderPresenter(this);
-
         setColumns();
         setListeners();
-
         printerTableView.setItems(iReaderPresenter.fillTerminalTable());
 
     }

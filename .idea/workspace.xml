@@ -8,12 +8,11 @@
   <component name="ChangeListManager">
     <list default="true" id="db5bb6f6-b25d-4bc9-a9c5-97cde211c429" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/artifacts/PrintManagement_jar/PrintManagement.jar" beforeDir="false" afterPath="$PROJECT_DIR$/classes/artifacts/PrintManagement_jar/PrintManagement.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/artifacts/PrintManagement_jar/PrintManagement.jar" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/domain/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/domain/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/Reader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/domain/Reader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/domain/presenter/IReaderPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/domain/presenter/IReaderPresenter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/presenter/ReaderPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/domain/presenter/ReaderPresenter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/domain/services/DBService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/domain/services/DBService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/domain/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/domain/Controller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/domain/presenter/IReaderPresenter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/domain/presenter/IReaderPresenter.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -31,13 +30,13 @@
     <session id="-1949795654">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="22" />
+          <entry key="project.closed" value="23" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.13" value="2" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.15" value="3" />
           <entry key="project.open.time.16" value="2" />
-          <entry key="project.open.time.17" value="3" />
+          <entry key="project.open.time.17" value="4" />
           <entry key="project.open.time.18" value="1" />
           <entry key="project.open.time.19" value="1" />
           <entry key="project.open.time.2" value="2" />
@@ -49,7 +48,7 @@
           <entry key="project.open.time.3" value="3" />
           <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.47" value="1" />
-          <entry key="project.opened" value="29" />
+          <entry key="project.opened" value="30" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -58,7 +57,7 @@
           <entry key="fxml" value="6" />
           <entry key="java" value="63" />
           <entry key="ps1" value="1" />
-          <entry key="txt" value="8" />
+          <entry key="txt" value="9" />
           <entry key="xml" value="5" />
         </counts>
       </usages-collector>
@@ -66,20 +65,20 @@
         <counts>
           <entry key="CLASS" value="4" />
           <entry key="JAVA" value="63" />
-          <entry key="PLAIN_TEXT" value="9" />
+          <entry key="PLAIN_TEXT" value="10" />
           <entry key="XML" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="fxml" value="448" />
-          <entry key="java" value="7935" />
+          <entry key="java" value="7937" />
           <entry key="xml" value="72" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="7935" />
+          <entry key="JAVA" value="7937" />
           <entry key="XML" value="520" />
         </counts>
       </usages-collector>
@@ -90,7 +89,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/domain/presenter/ReaderPresenter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
+            <state relative-caret-position="204">
               <caret line="18" column="47" selection-start-line="18" selection-start-column="47" selection-end-line="18" selection-end-column="47" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -102,8 +101,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/domain/presenter/IReaderPresenter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1445">
-              <caret line="97" column="9" lean-forward="true" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
+            <state relative-caret-position="11">
+              <caret line="29" column="59" selection-start-line="29" selection-start-column="59" selection-end-line="29" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -114,8 +113,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/domain/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="82" column="38" lean-forward="true" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
+            <state relative-caret-position="850">
+              <caret line="70" column="72" selection-start-line="70" selection-start-column="64" selection-end-line="70" selection-end-column="76" />
             </state>
           </provider>
         </entry>
@@ -124,7 +123,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/domain/DataProvider.java">
           <provider selected="true" editor-type-id="text-editor">
             <state>
-              <caret column="15" lean-forward="true" selection-start-column="15" selection-end-column="15" />
+              <caret column="15" selection-start-column="15" selection-end-column="15" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -135,8 +134,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/domain/Reader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-510">
-              <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+            <state relative-caret-position="561">
+              <caret line="37" column="49" selection-start-line="37" selection-start-column="49" selection-end-line="37" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -144,8 +143,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/domain/services/DBService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1428">
-              <caret line="87" column="24" lean-forward="true" selection-start-line="87" selection-start-column="24" selection-end-line="87" selection-end-column="24" />
+            <state relative-caret-position="391">
+              <caret line="30" column="29" selection-start-line="30" selection-start-column="29" selection-end-line="30" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -192,9 +191,9 @@
         <option value="$PROJECT_DIR$/src/main/java/domain/DataProvider.java" />
         <option value="$PROJECT_DIR$/src/main/java/domain/Reader.java" />
         <option value="$PROJECT_DIR$/src/main/java/domain/presenter/ReaderPresenter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/domain/presenter/IReaderPresenter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/domain/Controller.java" />
         <option value="$PROJECT_DIR$/src/main/java/domain/services/DBService.java" />
+        <option value="$PROJECT_DIR$/src/main/java/domain/Controller.java" />
+        <option value="$PROJECT_DIR$/src/main/java/domain/presenter/IReaderPresenter.java" />
       </list>
     </option>
   </component>
@@ -233,7 +232,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -339,6 +337,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -346,7 +345,7 @@
     <property name="GenerateAntBuildDialog.enableUiFormCompile" value="true" />
     <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="printmanagement" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1549017182625" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1549277642077" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../alpha-api/pom.xml" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
@@ -425,11 +424,19 @@
     </task>
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.33742005" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3411514" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -442,61 +449,25 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.329718" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Inspection Results" order="8" weight="0.329718" />
       <window_info anchor="bottom" id="Terminal" order="9" weight="0.2483731" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5010661" side_tool="true" weight="0.335141" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.329718" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" sideWeight="0.49514562" visible="true" weight="0.046375267" />
+      <window_info anchor="right" id="Ant Build" order="1" sideWeight="0.49514562" weight="0.17324094" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
-      <window_info anchor="right" id="Maven Projects" order="7" sideWeight="0.49918434" weight="0.16044776" />
+      <window_info anchor="right" id="Maven Projects" order="7" sideWeight="0.49918434" visible="true" weight="0.16044776" />
       <window_info anchor="right" id="Coverage" order="8" sideWeight="0.5048544" side_tool="true" visible="true" weight="0.046375267" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/domain/Reader.java</url>
-          <line>28</line>
-          <properties />
-          <option name="timeStamp" value="25" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/domain/Reader.java</url>
-          <line>30</line>
-          <properties />
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/domain/Reader.java</url>
-          <line>27</line>
-          <properties />
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/domain/Reader.java</url>
-          <line>26</line>
-          <properties />
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/domain/Reader.java</url>
-          <line>42</line>
-          <properties />
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -544,13 +515,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-289">
           <caret line="91" column="36" lean-forward="true" selection-start-line="91" selection-start-column="36" selection-end-line="91" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/core/etykietaEDI.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-711">
-          <caret column="43" selection-start-column="43" selection-end-column="43" />
         </state>
       </provider>
     </entry>
@@ -607,9 +571,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/core/etykietaEDI.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="39" lean-forward="true" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/domain/presenter/ReaderPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
+        <state relative-caret-position="204">
           <caret line="18" column="47" selection-start-line="18" selection-start-column="47" selection-end-line="18" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -619,25 +590,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/domain/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="82" column="38" lean-forward="true" selection-start-line="82" selection-start-column="38" selection-end-line="82" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/domain/services/DBService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1428">
-          <caret line="87" column="24" lean-forward="true" selection-start-line="87" selection-start-column="24" selection-end-line="87" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="850">
+          <caret line="70" column="72" selection-start-line="70" selection-start-column="64" selection-end-line="70" selection-end-column="76" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/domain/DataProvider.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="15" lean-forward="true" selection-start-column="15" selection-end-column="15" />
+          <caret column="15" selection-start-column="15" selection-end-column="15" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -646,15 +607,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/domain/Reader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-510">
-          <caret line="10" column="4" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="4" />
+        <state relative-caret-position="561">
+          <caret line="37" column="49" selection-start-line="37" selection-start-column="49" selection-end-line="37" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/domain/services/DBService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="30" column="29" selection-start-line="30" selection-start-column="29" selection-end-line="30" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/domain/presenter/IReaderPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1445">
-          <caret line="97" column="9" lean-forward="true" selection-start-line="97" selection-start-column="9" selection-end-line="97" selection-end-column="9" />
+        <state relative-caret-position="11">
+          <caret line="29" column="59" selection-start-line="29" selection-start-column="59" selection-end-line="29" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -6,15 +6,10 @@ import fr.w3blog.zpl.model.ZebraLabel;
 import fr.w3blog.zpl.model.ZebraUtils;
 import fr.w3blog.zpl.model.element.ZebraNativeZpl;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.TableView;
-import lombok.AllArgsConstructor;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -85,9 +80,9 @@ public class IReaderPresenter implements ReaderPresenter {
 
         zebraLabel.addElement(new ZebraNativeZpl(zpl));
 
-        if (InetAddress.getByName("172.16.1.151").isReachable(1000)) {
+        if (InetAddress.getByName("172.16.1.161").isReachable(1000)) {
             try {
-                ZebraUtils.printZpl(zebraLabel, "172.16.1.151", 9100);
+                ZebraUtils.printZpl(zebraLabel, "172.16.1.161", 9100);
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("ERROR 2"); //todo
